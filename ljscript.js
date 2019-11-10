@@ -228,7 +228,7 @@ function kollaMonsterKrock()
             mySound.play();speletSlut=false;raknare=0;direction=0;
             document.getElementById('gameover').src="uppil.png";
             document.getElementById("gameover").className = "styrpilupp";
-            bytKarta(kartan);
+            klickar=true;bytKarta(kartan);
             }
         }
         //ta emot kartvärde och justera knapparna i enlighet med valt värde
