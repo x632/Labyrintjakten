@@ -1,8 +1,7 @@
 
 //fart på monstren och spelaren(ms)
-setInterval('timingmonster()',800);
-setInterval('flyttaSpelare()', 400);
-
+setInterval('flyttaSpelare()', 430);
+var flyttatSpelare=0;
 var direction=0;
 kartan='1';
 var speletSlut=true;
@@ -90,14 +89,8 @@ function flyttamonster(m1,m2,m3,m4){
                 case(4): monster4pos.x += 1;
                 break;
                 }
-               /*  console.log("y"+monster1pos.y+"x"+monster1pos.x);
-                console.log("y"+monster2pos.y+"x"+monster2pos.x);
-                console.log("y"+monster3pos.y+"x"+monster3pos.x);
-                console.log("y"+monster4pos.y+"x"+monster4pos.x); */
-                                //Sätt in monstren i arrayn på ny plats och rita ut dem
             karta[monster1pos.y][monster1pos.x]=4;
             var kord = gorStrang(monster1pos.y,monster1pos.x);
-            console.log("gjord till sträng"+kord);
             document.getElementById(kord).className = "monster";
             karta[monster2pos.y][monster2pos.x]=4;
             kord = gorStrang(monster2pos.y,monster2pos.x)
@@ -110,8 +103,7 @@ function flyttamonster(m1,m2,m3,m4){
             document.getElementById(kord).className = "monster";
             kollaMonsterKrock();//kolla om monsterkrock..          
         }
-        function timingmonster() //den timade funktionen som sätter igång monsterflyttsfunktionen
-        {console.log("räknare="+raknare); 
+        function timingmonster(){ //den timade funktionen som sätter igång monsterflyttsfunktionen
             flyttamonster(monster1rorelse[raknare],
             monster2rorelse[raknare],
             monster3rorelse[raknare],
@@ -123,7 +115,7 @@ function flyttamonster(m1,m2,m3,m4){
 function gorStrang(a,b){
         var korY=a.toString();
         var korX=b.toString();
-        var kor="y"+korY+"x"+korX;console.log(kor);
+        var kor="y"+korY+"x"+korX;
         return kor
         }
             
@@ -164,8 +156,9 @@ function bytriktning(riktning)
        kollaMonsterKrock();
     }
 
-function flyttaSpelare ()
-    {
+function flyttaSpelare (){
+    if (flyttatSpelare<2){flyttatSpelare+=1};//ser till så monstren håller..
+    if (flyttatSpelare==2){timingmonster();flyttatSpelare=0};//..halva hastigheten
     if (speletSlut==false)//utför endast om spelet är igång
         {   
         bytriktning(direction);//kolla om vägg eller annat i vägen först
@@ -191,6 +184,7 @@ function flyttaSpelare ()
         var kord = gorStrang(spelarePos.y,spelarePos.x);//gor sträng av koordinater
         document.getElementById(kord).className = "spelaren";//rita ut nya spelarpositionen
         }
+
     }
 
 
@@ -245,7 +239,6 @@ function kollaMonsterKrock()
         document.getElementById('bana2').src="lab2.png";
         raknare=0;klickat=true;bytKarta(kartan);
         }
-
         else if (k =='2') {document.getElementById('bana2').src="tryckt2.png";
         document.getElementById('bana1').src="lab1.png";
         raknare=0;klickat=true;bytKarta(kartan);
