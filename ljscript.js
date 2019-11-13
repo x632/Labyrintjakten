@@ -1,24 +1,26 @@
 
 //fart på monstren och spelaren(ms)
-setInterval('flyttaSpelare()', 430);
+var spelareTimer,timernAktiv=true;
 var flyttatSpelare=0;
 var direction=0;
-kartan='1';
+var kartan='1';
 var speletSlut=true;
-var klickat=false;
 var mySound;
 var raknare=0;
 
-function bytKarta(kartNummer) {
-    raderaGamlaPositioner();
-    if (speletSlut==false||klickat==true){//ser till att det inte går att byta karta under spelets gång, men ändå emellan
+function sattTimer(aktiv){
+if (aktiv==true) {spelareTimer=setInterval('flyttaSpelare()', 350);console.log("Timern sattes på "+spelareTimer)}
+else if (aktiv==false) {clearInterval(spelareTimer);console.log("Timern stängdes av "+spelareTimer)}
+}
+function bytKarta(kartNummer) { 
+    if (spelareTimer != undefined){timernAktiv=false;sattTimer(timernAktiv)};
+    raderaGamlaPositioner()
     document.getElementById("scriptLinkPlaceholder").innerHTML = "";
     var newScript = document.createElement("script");
     newScript.src = "map" + kartNummer + ".js";
     newScript.id = "scriptLink";
     document.getElementById("scriptLinkPlaceholder").appendChild(newScript);
-    ritaUtAllt();
-    }
+    ritaUtAllt();timernAktiv=true;sattTimer(timernAktiv);
 }
 function ritaUtAllt()//skapa html divarna och sätt css klasserna som utgör labyrinten 
         {   document.getElementById("labyrinten").innerHTML ="";
@@ -43,7 +45,7 @@ function ritaUtAllt()//skapa html divarna och sätt css klasserna som utgör lab
                       
         }
 
-function flyttamonster(m1,m2,m3,m4){  
+function flyttamonster(m1,m2,m3,m4){
     raderaGamlaPositioner();   
                 switch (m1)
                 {
@@ -102,15 +104,18 @@ function flyttamonster(m1,m2,m3,m4){
             kord = gorStrang(monster4pos.y,monster4pos.x)
             document.getElementById(kord).className = "monster";
             kollaMonsterKrock();//kolla om monsterkrock..          
-        }
+            }
+        
         function timingmonster(){ //den timade funktionen som sätter igång monsterflyttsfunktionen
+           
             flyttamonster(monster1rorelse[raknare],
             monster2rorelse[raknare],
             monster3rorelse[raknare],
             monster4rorelse[raknare]);        
             raknare+=1;//steget i monsterrörelse-arrayn.
             if (raknare==16){raknare=0}; //monstrens rörelseschema startas om
-        }
+                                  
+      }
        
 function gorStrang(a,b){
         var korY=a.toString();
@@ -153,12 +158,13 @@ function bytriktning(riktning)
         {direction=4;}
         else {direction=0;} //0 = annars stanna
         
-       kollaMonsterKrock();
-    }
+       kollaMonsterKrock();}
+    
 
 function flyttaSpelare (){
+    {
     if (flyttatSpelare<2){flyttatSpelare+=1};//ser till så monstren håller..
-    if (flyttatSpelare==2){timingmonster();flyttatSpelare=0};//..halva hastigheten
+    if (flyttatSpelare==2){timingmonster();flyttatSpelare=0;};//..halva hastigheten
     if (speletSlut==false)//utför endast om spelet är igång
         {   
         bytriktning(direction);//kolla om vägg eller annat i vägen först
@@ -185,12 +191,13 @@ function flyttaSpelare (){
         document.getElementById(kord).className = "spelaren";//rita ut nya spelarpositionen
         }
 
+    
     }
-
+}
 
 function kollaMonsterKrock()
     {
-    if (speletSlut==false)//utför endast om spelet är igång
+    if (speletSlut==false)
         {      
         if (spelarePos.y == monster1pos.y && spelarePos.x == monster1pos.x){
         slut()}
@@ -202,6 +209,7 @@ function kollaMonsterKrock()
         slut()}
         }
     }
+    
 
     function slut(){
                     mySound=new sound("spokljud.wav");mySound.play();
@@ -210,7 +218,7 @@ function kollaMonsterKrock()
                     karta[spelarePos.y][spelarePos.x]=2;//radera spelaren
                     var kord = gorStrang(spelarePos.y,spelarePos.x);
                     document.getElementById(kord).className = "tomt";
-                    direction=0;speletSlut=true;
+                    direction=0;flyttatSpelare=0;speletSlut=true;
                 }
     
                     
@@ -225,23 +233,25 @@ function kollaMonsterKrock()
     function starta(){
         if(speletSlut==true){
             mySound=new sound("startljud.wav");
-            mySound.play();speletSlut=false;raknare=0;direction=0;
+            mySound.play();raknare=0;direction=0;
             document.getElementById('gameover').src="uppil.png";
             document.getElementById("gameover").className = "styrpilupp";
-            klickar=true;bytKarta(kartan);
+            bytKarta(kartan);speletSlut=false;
             }
         }
         //ta emot kartvärde och justera knapparna i enlighet med valt värde
-    function taEmotKartVarde(k){
-        kartan=k;
+        function taEmotKartVarde(k){
         if (speletSlut==true){
-        if (k =='1') {document.getElementById('bana1').src="tryckt1.png";
+            timernAktiv=false;sattTimer(timernAktiv)
+        if (k =='1') {kartan=k;
+        document.getElementById('bana1').src="tryckt1.png";
         document.getElementById('bana2').src="lab2.png";
-        raknare=0;klickat=true;bytKarta(kartan);
+        raknare=0;bytKarta(kartan)
         }
-        else if (k =='2') {document.getElementById('bana2').src="tryckt2.png";
-        document.getElementById('bana1').src="lab1.png";
-        raknare=0;klickat=true;bytKarta(kartan);
+        else if (k =='2') {kartan=k;
+        document.getElementById('bana2').src="tryckt2.png";
+        document.getElementById('bana1').src="lab1.png"; raknare=0;
+        bytKarta(kartan)
         }
        
         }
@@ -260,4 +270,3 @@ function kollaMonsterKrock()
             this.sound.pause();
         }    
     }
-      
