@@ -9,8 +9,8 @@ var mySound;
 var raknare=0;
 
 function sattTimer(aktiv){
-if (aktiv==true) {spelareTimer=setInterval('flyttaSpelare()', 390);console.log("Timern sattes på "+spelareTimer)}
-else if (aktiv==false) {clearInterval(spelareTimer);console.log("Timern stängdes av "+spelareTimer)}
+if (aktiv==true) {spelareTimer=setInterval('flyttaSpelare()', 390)}
+else if (aktiv==false) {clearInterval(spelareTimer)}
 }
 function bytKarta(kartNummer) { 
     if (spelareTimer != undefined){timernAktiv=false;sattTimer(timernAktiv)};
@@ -121,8 +121,8 @@ function gorStrang(a,b){
         var korY=a.toString();
         var korX=b.toString();
         var kor="y"+korY+"x"+korX;
-        return kor
-        }
+        return kor;
+       }
             
     
     function raderaGamlaPositioner(){
@@ -212,22 +212,27 @@ function kollaMonsterKrock()
     
 
     function slut(){
+                    speletSlut=true;
                     mySound=new sound("spokljud.wav");mySound.play();
                     document.getElementById('gameover').src="gameover.png";
                     document.getElementById("gameover").className = "gameover";
                     karta[spelarePos.y][spelarePos.x]=2;//radera spelaren
                     var kord = gorStrang(spelarePos.y,spelarePos.x);
                     document.getElementById(kord).className = "tomt";
-                    direction=0;flyttatSpelare=0;speletSlut=true;
+                    direction=0;flyttatSpelare=0;
+                    
                 }
     
                     
     function vunnit(){
 
+        speletSlut=true;
         mySound=new sound("applad.wav");mySound.play();
         document.getElementById('gameover').src="vinst.png";
         document.getElementById("gameover").className = "gameover";
-        direction=0;speletSlut=true;
+        karta[spelarePos.y][spelarePos.x]=2;//radera spelaren
+        document.getElementById(y24x18).className = "tomt";
+        direction=0;flyttatSpelare=0;
     }    
   
     function starta(){
