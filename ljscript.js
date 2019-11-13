@@ -1,6 +1,6 @@
 
 //fart på monstren och spelaren(ms)
-var spelareTimer,timernAktiv=true;
+var spelareTimer,timernAktiv=false;
 var flyttatSpelare=0;
 var direction=0;
 var kartan='1';
@@ -8,21 +8,22 @@ var speletSlut=true;
 var mySound;
 var raknare=0;
 
+//timerfunktionen (av)aktiveras av boolvariabeln 'timernAktiv'
 function sattTimer(aktiv){
-if (aktiv==true) {spelareTimer=setInterval('flyttaSpelare()', 390)}
+if (aktiv==true) {spelareTimer=setInterval('flyttaSpelare()', 500)}
 else if (aktiv==false) {clearInterval(spelareTimer)}
 }
 function bytKarta(kartNummer) { 
-    if (spelareTimer != undefined){timernAktiv=false;sattTimer(timernAktiv)};
+    timernAktiv=false;sattTimer(timernAktiv);
     raderaGamlaPositioner()
     document.getElementById("scriptLinkPlaceholder").innerHTML = "";
     var newScript = document.createElement("script");
     newScript.src = "map" + kartNummer + ".js";
     newScript.id = "scriptLink";
     document.getElementById("scriptLinkPlaceholder").appendChild(newScript);
-    ritaUtAllt();timernAktiv=true;sattTimer(timernAktiv);
+    ritaUtAllt();//timernAktiv=true;sattTimer(timernAktiv);
 }
-function ritaUtAllt()//skapa html divarna och sätt css klasserna som utgör labyrinten 
+function ritaUtAllt()//skapa html divarna enligt arrayn och sätt css klasserna som utgör labyrinten 
         {   document.getElementById("labyrinten").innerHTML ="";
             for (var i=0;i<karta.length;i++)//y-koordinatet
 
@@ -113,7 +114,7 @@ function flyttamonster(m1,m2,m3,m4){
             monster3rorelse[raknare],
             monster4rorelse[raknare]);        
             raknare+=1;//steget i monsterrörelse-arrayn.
-            if (raknare==16){raknare=0}; //monstrens rörelseschema startas om
+            if (raknare==monster1rorelse.length){raknare=0}; //monstrens rörelseschema startas om
                                   
       }
        
@@ -171,7 +172,7 @@ function flyttaSpelare (){
         karta[spelarePos.y][spelarePos.x]=2;//ta bort gamla spelaren från arrayn
         var kord = gorStrang(spelarePos.y,spelarePos.x);
         document.getElementById(kord).className = "tomt";
-        
+        //samma som med monstren
         switch (direction)
         {
         case(1): spelarePos.y -= 1;
@@ -212,7 +213,7 @@ function kollaMonsterKrock()
     
 
     function slut(){
-                    speletSlut=true;
+                    speletSlut=true; 
                     mySound=new sound("spokljud.wav");mySound.play();
                     document.getElementById('gameover').src="gameover.png";
                     document.getElementById("gameover").className = "gameover";
@@ -228,6 +229,7 @@ function kollaMonsterKrock()
 
         speletSlut=true;
         mySound=new sound("applad.wav");mySound.play();
+        //byt ut pilupp styrbilden med "Du vann"-texten
         document.getElementById('gameover').src="vinst.png";
         document.getElementById("gameover").className = "gameover";
         karta[spelarePos.y][spelarePos.x]=2;//radera spelaren
@@ -241,13 +243,13 @@ function kollaMonsterKrock()
             mySound.play();raknare=0;direction=0;
             document.getElementById('gameover').src="uppil.png";
             document.getElementById("gameover").className = "styrpilupp";
-            bytKarta(kartan);speletSlut=false;
+            bytKarta(kartan);speletSlut=false;sattTimer(true);
             }
         }
         //ta emot kartvärde och justera knapparna i enlighet med valt värde
         function taEmotKartVarde(k){
         if (speletSlut==true){
-            timernAktiv=false;sattTimer(timernAktiv)
+            timernAktiv=false;sattTimer(timernAktiv)//inaktivera timern medan detta görs
         if (k =='1') {kartan=k;
         document.getElementById('bana1').src="tryckt1.png";
         document.getElementById('bana2').src="lab2.png";
