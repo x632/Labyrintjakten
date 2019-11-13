@@ -9,7 +9,7 @@ var mySound;
 var raknare=0;
 
 function sattTimer(aktiv){
-if (aktiv==true) {spelareTimer=setInterval('flyttaSpelare()', 350);console.log("Timern sattes på "+spelareTimer)}
+if (aktiv==true) {spelareTimer=setInterval('flyttaSpelare()', 390);console.log("Timern sattes på "+spelareTimer)}
 else if (aktiv==false) {clearInterval(spelareTimer);console.log("Timern stängdes av "+spelareTimer)}
 }
 function bytKarta(kartNummer) { 
