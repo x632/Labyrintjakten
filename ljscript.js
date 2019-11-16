@@ -1,12 +1,10 @@
-
-//fart på monstren och spelaren(ms)
-var spelareTimer,timernAktiv=false;
-var flyttatSpelare=0;
-var direction=0;
-var kartan='1';
-var speletSlut=true;
-var mySound;
-var raknare=0;
+var spelareTimer,timernAktiv=false;//sätter på och stänger av timerfunktion
+var flyttatSpelare=0;//variabeln används för åstadkomma att monstren är långsammare än spelaren
+var direction=0;//riktningen på spelare
+var kartan='1';//vilken karta (som är aktiv först)
+var speletSlut=true;//spelet igång eller slut
+var mySound;//ljud
+var raknare=0;//raknare för monsterrörelse
 
 //timerfunktionen (av)aktiveras av boolvariabeln 'timernAktiv'
 function sattTimer(aktiv){
@@ -14,7 +12,7 @@ if (aktiv==true) {spelareTimer=setInterval('flyttaSpelare()', 370)}
 else if (aktiv==false) {clearInterval(spelareTimer)}
 }
 function bytKarta(kartNummer) { 
-    timernAktiv=false;sattTimer(timernAktiv);
+    timernAktiv=false;sattTimer(timernAktiv);//stänger av timer - undviker buggar
     raderaGamlaPositioner()
     document.getElementById("scriptLinkPlaceholder").innerHTML = "";
     var newScript = document.createElement("script");
@@ -233,7 +231,7 @@ function kollaMonsterKrock()
         document.getElementById('gameover').src="vinst.png";
         document.getElementById("gameover").className = "gameover";
         karta[spelarePos.y][spelarePos.x]=2;//radera spelaren
-        document.getElementById(y24x18).className = "tomt";
+        document.getElementById(y24x18).className = "tomt";//går direkt på ID:t - quickfix för bugg i detta läge
         direction=0;flyttatSpelare=0;
     }    
   
@@ -249,7 +247,7 @@ function kollaMonsterKrock()
         //ta emot kartvärde och justera knapparna i enlighet med valt värde
         function taEmotKartVarde(k){
             
-        if (speletSlut==true){window.setTimeout(bytKarta,100);//paus innan bytKartafunktionen löser "tvåtrycks"-problemet åtm. på safari
+        if (speletSlut==true){window.setTimeout(bytKarta,100);//paus innan bytKartafunktionen löser "tvåtrycks"-problemet åtm. i safari
             timernAktiv=false;sattTimer(timernAktiv)//inaktivera timern medan detta görs
             kartan=k;
         if (k =='1') {
