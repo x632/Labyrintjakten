@@ -10,7 +10,7 @@ var raknare=0;
 
 //timerfunktionen (av)aktiveras av boolvariabeln 'timernAktiv'
 function sattTimer(aktiv){
-if (aktiv==true) {spelareTimer=setInterval('flyttaSpelare()', 500)}
+if (aktiv==true) {spelareTimer=setInterval('flyttaSpelare()', 370)}
 else if (aktiv==false) {clearInterval(spelareTimer)}
 }
 function bytKarta(kartNummer) { 
@@ -24,7 +24,7 @@ function bytKarta(kartNummer) {
     ritaUtAllt();//timernAktiv=true;sattTimer(timernAktiv);
 }
 function ritaUtAllt()//skapa html divarna enligt arrayn och sätt css klasserna som utgör labyrinten 
-        {   document.getElementById("labyrinten").innerHTML ="";
+        {   document.getElementById("labyrinten").innerHTML ="";console.log("utritningen har körts!");
             for (var i=0;i<karta.length;i++)//y-koordinatet
 
                 {
@@ -248,17 +248,19 @@ function kollaMonsterKrock()
         }
         //ta emot kartvärde och justera knapparna i enlighet med valt värde
         function taEmotKartVarde(k){
-        if (speletSlut==true){
+            
+        if (speletSlut==true){window.setTimeout(bytKarta,100);//paus innan bytKartafunktionen löser "tvåtrycks"-problemet åtm. på safari
             timernAktiv=false;sattTimer(timernAktiv)//inaktivera timern medan detta görs
-        if (k =='1') {kartan=k;
-        document.getElementById('bana1').src="tryckt1.png";
+            kartan=k;
+        if (k =='1') {
+        document.getElementById('bana1').src="tryckt1.png";//byt ut andra knappen
         document.getElementById('bana2').src="lab2.png";
-        raknare=0;bytKarta(kartan)
+        raknare=0;bytKarta(k)
         }
-        else if (k =='2') {kartan=k;
+        else if (k =='2') {//skicka som karta
         document.getElementById('bana2').src="tryckt2.png";
         document.getElementById('bana1').src="lab1.png"; raknare=0;
-        bytKarta(kartan)
+        bytKarta(k)
         }
        
         }
